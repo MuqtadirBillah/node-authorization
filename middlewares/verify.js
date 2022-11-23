@@ -1,34 +1,28 @@
 const jwt = require("jsonwebtoken")
-const { jwt_key } = require("../config/db.config")
-const { handleResponseWithStatus } = require("../helper/utils");
 
 
 
 const verifyToken = (req, res, next)=>{
     const token = req.headers.token
     if(token!=undefined){
-        jwt.verify(token, jwt_key, function(err, decoded) {
+        jwt.verify(token, "f0af17449a83681de22db7ce16672f16f37131bec0022371d4ace5d1854301e0", function(err, decoded) {
             if(err){
-                // next(err);
-                handleResponseWithStatus(res, 401, false, err, { status: "error", error: 'Unauthorized User!' });
+                console.log(err)
+                res.send({ status: "error", error: 'Unauthorized User!' });
             }
             else{
                 if(decoded!=undefined){
-                    console.log('-----------Token Decoded!')
                     console.log(decoded)
-                    console.log('-----------Token Decoded!')
-                    // res.send(decoded)
-                    res.locals = decoded;
                     next();
                 }
                 else{
-                    handleResponseWithStatus(res, 401, false, "", { status: "error", error: 'Unauthorized User!' });
+                    res.send({ status: "error", error: 'Unauthorized User!' });
                 }
             }
         });
     }
     else{
-        handleResponseWithStatus(res, 401, false, "", { status: "error", error: 'Unauthorized User!' });
+        res.send({ status: "error", error: 'Unauthorized User!' });
     }
 }
 
