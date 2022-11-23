@@ -1,17 +1,19 @@
 const User = require("../models/user");
 const moment = require("moment");
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const login = (req, res) =>{
     User.find({ email: req.body.email}, function (err, docs) {
         if (err){
             console.log(err);
+            res.send('Something went wrong!')
         }
         else{
             if(docs.length>0){
                 if(bcrypt.compareSync(req.body.password, docs[0].password)){
-                    let token = jwt.sign({ foo: 'bar' }, "f0af17449a83681de22db7ce16672f16f37131bec0022371d4ace5d1854301e0", { algorithm: 'RS256'});
-                    res.status(200).json({ status: "success", token: token })                    
+                    let token = jwt.sign({ email: docs[0].email, username: docs[0].username }, "f0af17449a83681de22db7ce16672f16f37131bec0022371d4ace5d1854301e0");
+                    res.status(200).json({ status: "success", token: token })   
                 }
                 else{
                     res.send("Invalid Credentials!");

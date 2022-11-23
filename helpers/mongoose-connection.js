@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-const mongoAtlasUri = `mongodb://localhost:27017/basic`
+const mongoAtlasUri = `mongodb://0.0.0.0:27017/basic`
 
 function mongooseConnection(){
     try {
